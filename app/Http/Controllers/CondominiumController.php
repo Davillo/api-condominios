@@ -18,10 +18,15 @@ class CondominiumController extends Controller
         $this->condominiumRepository = $condominiumRepository;
     }
 
-    function index()
+    function index(Request $request)
     {
-        $condominiums = $this->condominiumRepository->paginate(15);
-        return response()->json($condominiums);
+        $urlQueryFields = $request->query();
+
+        $paginatedCondominiums = $this->condominiumRepository
+        ->search($urlQueryFields)
+        ->paginate(20);
+
+        return response()->json($paginatedCondominiums);
     }
 
     function store(CondominiumStoreRequest $request)

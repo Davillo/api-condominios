@@ -20,7 +20,7 @@ class BlockController extends Controller
 
     function index()
     {
-        $blocks = $this->blockRepository->paginate(15);
+        $blocks = $this->blockRepository->paginate(20);
         return response()->json($blocks);
     }
 
