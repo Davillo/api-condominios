@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Condominium\CondominiumStoreRequest;
+use App\Http\Requests\Condominium\CondominiumUpdateRequest;
 use App\Repositories\CondominiumRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -17,7 +18,8 @@ class CondominiumController extends Controller
         $this->condominiumRepository = $condominiumRepository;
     }
 
-    function index(){
+    function index()
+    {
         $condominiums = $this->condominiumRepository->paginate(15);
         return response()->json($condominiums);
     }
@@ -25,6 +27,7 @@ class CondominiumController extends Controller
     function store(CondominiumStoreRequest $request)
     {
         $data = $request->validated();
+
         $condominiumData = Arr::except($data, 'blocks');
         $blocksData = Arr::only($data, 'blocks');
 
@@ -34,10 +37,21 @@ class CondominiumController extends Controller
         return response()->json(['data' => $condominium->refresh()], Response::HTTP_CREATED);
     }
 
-    function update($request, int $id)
+    function update(CondominiumUpdateRequest $request, int $id)
     {
         $data = $request->validated();
-        $condominium = $this->condominiumRepository->update($id, $data);
+
+        $condominiumData = Arr::except($data, 'blocks');
+        $blocksData = Arr::only($data, 'blocks');
+
+        $condominium = $this->condominiumRepository->update($id, $condominiumData);
+
+        if(isset($blocksData['blocks'])){
+            $condominium->blocks()->detach();
+            $condominium->blocks()->attach($blocksData['blocks']);
+        }
+
+        $condominium->refresh();
         return response()->json(['data' => $condominium]);
     }
 

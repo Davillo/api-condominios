@@ -22,4 +22,17 @@ class Block extends Model
         'pivot'
     ];
 
+    public function childrens()
+    {
+        return $this->hasMany(CondominiumBlock::class, 'block_id');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        static::deleted(function($block)
+        {
+            $block->childrens()->delete();
+        });
+    }
 }

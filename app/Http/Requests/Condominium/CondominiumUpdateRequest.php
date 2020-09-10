@@ -3,9 +3,8 @@
 namespace App\Http\Requests\Condominium;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class CondominiumStoreRequest extends FormRequest
+class CondominiumUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +24,9 @@ class CondominiumStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:100',
-            'email' => 'required|email|max:100|unique:condominiums,email,NULL,id,deleted_at,NULL',
-            'blocks' => 'array|required|min:1',
+            'name' => 'string|max:100',
+            'email' => 'email|unique:condominiums,deleted_at,NULL|max:80',
+            'blocks' => 'array|min:1',
             'blocks.*' => 'integer|exists:blocks,id,deleted_at,NULL'
         ];
     }

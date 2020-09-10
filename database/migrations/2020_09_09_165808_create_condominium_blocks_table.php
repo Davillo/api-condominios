@@ -20,7 +20,7 @@ class CreateCondominiumBlocksTable extends Migration
 
             $table->foreign('condominium_id')->references('id')->on('condominiums');
             $table->foreign('block_id')->references('id')->on('blocks');
-            
+
             $table->softDeletes();
         });
     }
