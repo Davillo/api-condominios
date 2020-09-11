@@ -14,6 +14,5 @@ class CondominiumRepository extends BaseRepository
         parent::__construct($condominium ?? new Condominium);
     }
 
-
 }
 
